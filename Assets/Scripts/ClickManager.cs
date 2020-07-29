@@ -8,11 +8,16 @@ public class ClickManager : MonoBehaviour
 {
     public static float pointCount; //Number of points the player has
     public float clickValue = 1.0f; //Number of points the player gets per click
+    public float shortTermProgress = 0.0f; //Number from 1-100 that spawns things
     public float passiveClick = 1.0f;
+    public float timer = 1.0f;
+
+    //References to game objects
     public GameObject pointDisplayObject; //Display point object
     public TMP_Text pointDisplayText;
-
-    public float timer = 1.0f;
+    public Slider progressBar;
+    public NotificationSwap notification;
+    
 
     [SerializeField]
     public float clickValueUpgradeCost = 100.0f;
@@ -24,15 +29,17 @@ public class ClickManager : MonoBehaviour
     {
         //clickValue = 1.0f;
         pointDisplayText = pointDisplayObject.GetComponent<TMP_Text>();
+        progressBar.value = shortTermProgress;
     }
 
     // Update is called once per frame
     void Update()
     {
         Click();
+        CheckUpgradeProgress();
         PassiveIncrease();
 
-        pointDisplayText.text = pointCount.ToString();
+        pointDisplayText.text = Mathf.Round(pointCount).ToString();
     }
 
     #region Standard Functions
@@ -41,6 +48,7 @@ public class ClickManager : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             pointCount += clickValue;
+            AddProgress();
             //Display rounded down value
         }
 
@@ -59,6 +67,32 @@ public class ClickManager : MonoBehaviour
             timer = 1.0f;
         }
     }
+
+    public void AddProgress()
+    {
+        shortTermProgress += 1;
+        //Check Progress
+        if (shortTermProgress >= 100)
+        {
+            //Spawn things then reset
+            shortTermProgress = 0;
+        }
+
+        progressBar.value = shortTermProgress;
+    }
+
+    public void CheckUpgradeProgress()
+    {
+        if (pointCount >= clickValueUpgradeCost || pointCount >= passiveClickUpgradeCost)
+        {
+            notification.SwapSpriteToActive();
+        }
+        else
+        {
+            notification.SwapSpriteToInactive();
+        }
+    }
+
 
     #endregion
 
