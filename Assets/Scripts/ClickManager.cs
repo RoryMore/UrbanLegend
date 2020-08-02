@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using TMPro;
 
 public class ClickManager : MonoBehaviour
@@ -12,17 +13,22 @@ public class ClickManager : MonoBehaviour
     public float passiveClick = 1.0f;
     public float timer = 1.0f;
 
+
+
     //References to game objects
     public GameObject pointDisplayObject; //Display point object
     public TMP_Text pointDisplayText;
     public Slider progressBar;
     public NotificationSwap notification;
+
     
+    public GameObject swipeBar;
+
 
     [SerializeField]
     public float clickValueUpgradeCost = 100.0f;
     public float passiveClickUpgradeCost = 100.0f;
-    
+
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +36,7 @@ public class ClickManager : MonoBehaviour
         //clickValue = 1.0f;
         pointDisplayText = pointDisplayObject.GetComponent<TMP_Text>();
         progressBar.value = shortTermProgress;
+       
     }
 
     // Update is called once per frame
@@ -38,6 +45,7 @@ public class ClickManager : MonoBehaviour
         Click();
         CheckUpgradeProgress();
         PassiveIncrease();
+  
 
         pointDisplayText.text = Mathf.Round(pointCount).ToString();
     }
@@ -45,14 +53,15 @@ public class ClickManager : MonoBehaviour
     #region Standard Functions
     public void Click()
     {
-        if (Input.GetMouseButtonDown(0))
+        //So long as we arent touching a game object, do the thing! This might need changing once I have a game object background lol
+        if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
         {
             pointCount += clickValue;
             AddProgress();
             //Display rounded down value
         }
 
-        
+
     }
 
     public void PassiveIncrease()
@@ -117,5 +126,15 @@ public class ClickManager : MonoBehaviour
             passiveClick += 0.05f;
         }
     }
+
+
+    #endregion
+
+    #region UI
+
+
+
     #endregion
 }
+
+
