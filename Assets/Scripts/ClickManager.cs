@@ -168,6 +168,8 @@ public class ClickManager : MonoBehaviour
         }
         else
         {
+
+            HideUI();
             upgradesObject.SetActive(true);
             SetUpgradesText();
         }
@@ -186,6 +188,7 @@ public class ClickManager : MonoBehaviour
         }
         else
         {
+            HideUI();
             currencyObject.SetActive(true);
             SetCurrencyText();
         }
@@ -204,6 +207,7 @@ public class ClickManager : MonoBehaviour
         }
         else
         {
+            HideUI();
             achievementsObject.SetActive(true);
             SetAchievementsText();
         }
