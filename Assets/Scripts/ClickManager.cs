@@ -20,9 +20,14 @@ public class ClickManager : MonoBehaviour
     public TMP_Text pointDisplayText;
     public Slider progressBar;
     public NotificationSwap notification;
+    public GameObject swipeBar;
+
+    // Upgrade Box stuff
+    public GameObject upgradesObject;
+    public TMP_Text upgradesText;
 
     
-    public GameObject swipeBar;
+    
 
 
     [SerializeField]
@@ -36,7 +41,9 @@ public class ClickManager : MonoBehaviour
         //clickValue = 1.0f;
         pointDisplayText = pointDisplayObject.GetComponent<TMP_Text>();
         progressBar.value = shortTermProgress;
-       
+
+        upgradesObject.SetActive(false);
+
     }
 
     // Update is called once per frame
@@ -45,7 +52,10 @@ public class ClickManager : MonoBehaviour
         Click();
         CheckUpgradeProgress();
         PassiveIncrease();
-  
+
+
+        //UI
+        SetUpgradesText();
 
         pointDisplayText.text = Mathf.Round(pointCount).ToString();
     }
@@ -58,6 +68,11 @@ public class ClickManager : MonoBehaviour
         {
             pointCount += clickValue;
             AddProgress();
+
+            if (upgradesObject.gameObject.activeInHierarchy)
+            {
+                upgradesObject.SetActive(false);
+            }
             //Display rounded down value
         }
 
@@ -114,6 +129,7 @@ public class ClickManager : MonoBehaviour
             pointCount -= clickValueUpgradeCost;
             clickValueUpgradeCost *= 1.5f;
             clickValue += 0.5f;
+            SetUpgradesText();
         }
     }
 
@@ -124,6 +140,7 @@ public class ClickManager : MonoBehaviour
             pointCount -= passiveClickUpgradeCost;
             passiveClickUpgradeCost *= 1.5f;
             passiveClick += 0.05f;
+            SetUpgradesText();
         }
     }
 
@@ -132,7 +149,23 @@ public class ClickManager : MonoBehaviour
 
     #region UI
 
+    public void ShowHideUpgrades()
+    {
+        if (upgradesObject.gameObject.activeInHierarchy)
+        {
+            upgradesObject.SetActive(false);
+        }
+        else
+        {
+            upgradesObject.SetActive(true);
+            SetUpgradesText();
+        }
+    }
 
+    public void SetUpgradesText()
+    {
+        upgradesText.text = "Your current 'points per click' is " + clickValue + " and would cost " + clickValueUpgradeCost + " to upgrade. Your points per second is " + passiveClick + " and would cost " + passiveClickUpgradeCost + " to upgrade.";
+    }
 
     #endregion
 }
