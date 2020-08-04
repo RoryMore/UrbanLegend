@@ -26,8 +26,14 @@ public class ClickManager : MonoBehaviour
     public GameObject upgradesObject;
     public TMP_Text upgradesText;
 
-    
-    
+    public GameObject currencyObject;
+    public TMP_Text currencyText;
+
+    public GameObject achievementsObject;
+    public TMP_Text achievementsText;
+
+
+
 
 
     [SerializeField]
@@ -38,11 +44,11 @@ public class ClickManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //clickValue = 1.0f;
+        
         pointDisplayText = pointDisplayObject.GetComponent<TMP_Text>();
         progressBar.value = shortTermProgress;
 
-        upgradesObject.SetActive(false);
+        HideUI();
 
     }
 
@@ -68,12 +74,9 @@ public class ClickManager : MonoBehaviour
         {
             pointCount += clickValue;
             AddProgress();
+            HideUI();
 
-            if (upgradesObject.gameObject.activeInHierarchy)
-            {
-                upgradesObject.SetActive(false);
-            }
-            //Display rounded down value
+
         }
 
 
@@ -129,7 +132,11 @@ public class ClickManager : MonoBehaviour
             pointCount -= clickValueUpgradeCost;
             clickValueUpgradeCost *= 1.5f;
             clickValue += 0.5f;
+
+            //Update UI
             SetUpgradesText();
+            SetAchievementsText();
+            SetCurrencyText();
         }
     }
 
@@ -140,7 +147,11 @@ public class ClickManager : MonoBehaviour
             pointCount -= passiveClickUpgradeCost;
             passiveClickUpgradeCost *= 1.5f;
             passiveClick += 0.05f;
+
+            //Update UI
             SetUpgradesText();
+            SetAchievementsText();
+            SetCurrencyText();
         }
     }
 
@@ -165,6 +176,61 @@ public class ClickManager : MonoBehaviour
     public void SetUpgradesText()
     {
         upgradesText.text = "Your current 'points per click' is " + clickValue + " and would cost " + clickValueUpgradeCost + " to upgrade. Your points per second is " + passiveClick + " and would cost " + passiveClickUpgradeCost + " to upgrade.";
+    }
+
+    public void ShowHideCurrency()
+    {
+        if (currencyObject.gameObject.activeInHierarchy)
+        {
+            currencyObject.SetActive(false);
+        }
+        else
+        {
+            currencyObject.SetActive(true);
+            SetCurrencyText();
+        }
+    }
+
+    public void SetCurrencyText()
+    {
+        currencyText.text = "This feature is not currently featured in the game!";
+    }
+
+    public void ShowHideAchievments()
+    {
+        if (achievementsObject.gameObject.activeInHierarchy)
+        {
+            achievementsObject.SetActive(false);
+        }
+        else
+        {
+            achievementsObject.SetActive(true);
+            SetAchievementsText();
+        }
+    }
+
+    public void SetAchievementsText()
+    {
+        achievementsText.text = "This feature is not currently featured in the game!";
+    }
+
+    public void HideUI()
+    {
+        //Hide UI 
+        if (upgradesObject.gameObject.activeInHierarchy)
+        {
+            upgradesObject.SetActive(false);
+        }
+
+        if (currencyObject.gameObject.activeInHierarchy)
+        {
+            currencyObject.SetActive(false);
+        }
+
+        if (achievementsObject.gameObject.activeInHierarchy)
+        {
+            achievementsObject.SetActive(false);
+        }
     }
 
     #endregion
